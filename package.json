@@ -1,5 +1,5 @@
 {
-  "name": "@ssut/nestjs-sqs",
+  "name": "@chxru/nestjs-sqs",
   "version": "3.0.1",
   "description": "",
   "main": "dist/index.js",
