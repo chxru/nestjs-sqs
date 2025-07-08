@@ -1,4 +1,12 @@
-import { DeleteMessageBatchCommand, DeleteMessageCommand, GetQueueAttributesCommand, PurgeQueueCommand, QueueAttributeName, SQSClient, Message as SqsMessage } from '@aws-sdk/client-sqs';
+import {
+  DeleteMessageBatchCommand,
+  DeleteMessageCommand,
+  GetQueueAttributesCommand,
+  PurgeQueueCommand,
+  QueueAttributeName,
+  SQSClient,
+  Message as SqsMessage,
+} from '@aws-sdk/client-sqs';
 import { DiscoveryService } from '@golevelup/nestjs-discovery';
 import { Inject, Injectable, Logger, LoggerService, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { Consumer, StopOptions } from 'sqs-consumer';
@@ -171,13 +179,16 @@ export class SqsService implements OnModuleInit, OnModuleDestroy {
 
     const command = new DeleteMessageCommand({
       QueueUrl: queueUrl,
-      ReceiptHandle: receiptHandle, 
-    })
+      ReceiptHandle: receiptHandle,
+    });
 
     return await sqs.send(command);
   }
 
-  public async deleteMessageBatch(name: QueueName, messages: SqsMessage[] | {MessageId: string, ReceiptHandle: string}[]) {
+  public async deleteMessageBatch(
+    name: QueueName,
+    messages: SqsMessage[] | { MessageId: string; ReceiptHandle: string }[],
+  ) {
     if (!this.consumers.has(name)) {
       throw new Error(`Consumer does not exist: ${name}`);
     }
@@ -194,9 +205,9 @@ export class SqsService implements OnModuleInit, OnModuleDestroy {
           Id: message.MessageId,
           ReceiptHandle: message.ReceiptHandle,
         };
-      })
-    })
+      }),
+    });
 
     return await sqs.send(commands);
-  } 
+  }
 }
