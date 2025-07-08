@@ -14,3 +14,9 @@ tsconfig.eslint.json
 jest-e2e.config.js
 jest.config.js
 .editorconfig
+.devenv*
+devenv.*
+devenv.local.nix
+.direnv
+.pre-commit-config.yaml
+.envrc

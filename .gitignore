@@ -77,3 +77,16 @@ node_modules/
 
 *.tgz
 tsconfig.vitest-temp.json
+
+# Devenv
+.devenv*
+devenv.*
+devenv.local.nix
+
+# direnv
+.direnv
+
+# pre-commit
+.pre-commit-config.yaml
+
+.envrc
