@@ -1,4 +1,5 @@
 import {
+  ChangeMessageVisibilityCommand,
   DeleteMessageBatchCommand,
   DeleteMessageCommand,
   GetQueueAttributesCommand,
@@ -165,6 +166,29 @@ export class SqsService implements OnModuleInit, OnModuleDestroy {
 
     const producer = this.producers.get(name);
     return producer.send(messages as any[]);
+  }
+
+  public async changeMessageVisibility(
+    name: QueueName,
+    receiptHandle: string,
+    visibilityTimeout: number,
+  ) {
+    if (!this.consumers.has(name)) {
+      throw new Error(`Consumer does not exist: ${name}`);
+    } 
+
+    const { sqs, queueUrl } = (this.consumers.get(name)?.instance ?? this.producers.get(name)) as {
+      sqs: SQSClient;
+      queueUrl: string;
+    };
+
+    const command = new ChangeMessageVisibilityCommand({
+      QueueUrl: queueUrl,
+      ReceiptHandle: receiptHandle,
+      VisibilityTimeout: visibilityTimeout,
+      })
+
+    return await sqs.send(command);
   }
 
   public async deleteMessage(name: QueueName, receiptHandle: string) {
