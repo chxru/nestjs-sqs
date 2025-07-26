@@ -185,7 +185,7 @@ export class SqsService implements OnModuleInit, OnModuleDestroy {
 
   public async deleteMessageBatch(
     name: QueueName,
-    messages: SqsMessage[] | { MessageId: string; ReceiptHandle: string }[],
+    messages: SqsMessage[] | Pick<SqsMessage, 'MessageId' | 'ReceiptHandle'>[],
   ) {
     if (!this.consumers.has(name)) {
       throw new Error(`Consumer does not exist: ${name}`);
@@ -196,7 +196,7 @@ export class SqsService implements OnModuleInit, OnModuleDestroy {
 
     const commands = new DeleteMessageBatchCommand({
       QueueUrl: queueUrl,
-      Entries: (messages as SqsMessage[]).map((message) => {
+      Entries: messages.map((message) => {
         return {
           Id: message.MessageId,
           ReceiptHandle: message.ReceiptHandle,
